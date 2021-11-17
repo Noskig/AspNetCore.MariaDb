@@ -34,10 +34,23 @@ namespace AspNetCore.MariaDB
                     mySqlOptions => mySqlOptions.ServerVersion(new Version(10, 5, 4), ServerType.MariaDb)
                 )
             );
+            services.AddScoped<IPostService, PostService>();
+            //services.AddScoped<IMariaDbWeatherForecastService, MariaDbWeatherForecastService>();
+            services.AddRazorPages();
 
-            services.AddScoped<IMariaDbWeatherForecastService, MariaDbWeatherForecastService>();
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(
+                    builder =>
+                    {
+                        builder.WithOrigins("http://localhost:3000",
+                                            "http://localhost:3363");
+                    });
+            });
+            services.AddControllersWithViews();
 
-            services.AddControllers();
+            //services.AddEndpointsApiExplorer();
+            //services.AddSwaggerGen();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -49,12 +62,19 @@ namespace AspNetCore.MariaDB
             }
 
             app.UseHttpsRedirection();
-
             app.UseRouting();
 
+            //app.UseEndpoints(endpoints =>
+            //{
+            //    endpoints.MapControllers();
+            //});
+
+            app.UseCors();
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllers();
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
             });
         }
     }

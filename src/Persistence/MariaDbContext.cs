@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AspNetCore.MariaDB.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,5 +15,7 @@ namespace AspNetCore.MariaDB.Persistence
         }
 
         public virtual DbSet<WeatherForecastDataModel> WeatherForecasts { get; set; }
+
+        public virtual DbSet<Post> Posts { get; set; }
     }
 }
